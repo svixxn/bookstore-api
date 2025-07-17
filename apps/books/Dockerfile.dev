@@ -1,0 +1,11 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY nest-cli.json tsconfig*.json ./
+RUN npm install
+COPY apps ./apps
+RUN npm install -g @nestjs/cli
+EXPOSE 3002
+CMD ["npm", "run", "start:dev:books"]

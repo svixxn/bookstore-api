@@ -8,7 +8,7 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: 'localhost',
+        host: process.env.BOOKS_SERVICE_HOST || 'localhost',
         port: 3002,
       },
     },

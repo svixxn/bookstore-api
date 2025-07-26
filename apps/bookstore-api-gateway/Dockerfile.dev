@@ -8,10 +8,11 @@ COPY nest-cli.json tsconfig*.json ./
 RUN npm install
 
 COPY apps ./apps
+COPY prisma ./prisma
 
 RUN npm install -g @nestjs/cli
 
 EXPOSE 3000
 
-# Start in dev watch mode
-CMD ["npm", "run", "start:dev:bookstore-api-gateway"]
+# Run database migrations and start development server
+CMD ["npm", "run", "migrate:start:dev:bookstore-api-gateway"]

@@ -6,6 +6,8 @@ COPY package*.json ./
 COPY nest-cli.json tsconfig*.json ./
 RUN npm install
 COPY apps ./apps
+COPY prisma ./prisma
 RUN npm install -g @nestjs/cli
 EXPOSE 3001
-CMD ["npm", "run", "start:dev:users"]
+# Run database migrations and start development server
+CMD ["npm", "run", "migrate:start:dev:users"]

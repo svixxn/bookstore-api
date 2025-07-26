@@ -1,98 +1,348 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Bookstore API - NestJS Microservices
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A scalable bookstore API built with NestJS microservices architecture, featuring PostgreSQL with Prisma ORM, Redis for caching, and Docker for containerization.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🏗️ Architecture
 
-## Description
+This application follows a microservices architecture with:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **API Gateway**: Main entry point that routes requests to appropriate microservices
+- **Books Service**: Handles all book-related operations
+- **Users Service**: Manages user data and operations
+- **PostgreSQL Database**: Shared database with Prisma ORM
+- **Redis**: Caching and inter-service communication
 
-## Project setup
+## 🗄️ Database Schema
 
-```bash
-$ npm install
+### User Model
+
+```prisma
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
 ```
 
-## Compile and run the project
+### Book Model
 
-```bash
-# development
-$ npm run start
+```prisma
+model Book {
+  id     Int    @id @default(autoincrement())
+  title  String
+  author String
+  rating Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+  @@map("books")
+}
 ```
 
-## Run tests
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js (v18+)
+- Docker & Docker Compose
+- PostgreSQL (if running locally)
+
+### Installation
+
+1. **Clone the repository**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone <repository-url>
+cd bookstore
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. **Install dependencies**
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+3. **Environment setup**
 
-## Resources
+```bash
+cp .env.example .env
+# Update DATABASE_URL and other environment variables
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+4. **Start with Docker (Recommended)**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+# Development
+docker-compose -f docker-compose.dev.yml up
 
-## Support
+# Production
+docker-compose up
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Manual Setup (without Docker)
 
-## Stay in touch
+1. **Start PostgreSQL and Redis**
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Using Docker for services only
+docker-compose -f docker-compose.dev.yml up db redis -d
+```
 
-## License
+2. **Database setup**
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+# Generate Prisma client
+npm run db:generate
+
+# Run migrations
+npm run db:migrate
+
+# Seed database (optional)
+npm run db:seed
+```
+
+3. **Start services**
+
+```bash
+# Start all services in development
+npm run start:dev:bookstore-api-gateway
+npm run start:dev:users
+npm run start:dev:books
+
+# Or start individually
+npm run start:dev           # API Gateway
+npm run start:dev:users     # Users Service
+npm run start:dev:books     # Books Service
+```
+
+## 📚 API Documentation
+
+### Books API
+
+| Method | Endpoint     | Description     |
+| ------ | ------------ | --------------- |
+| GET    | `/books`     | Get all books   |
+| GET    | `/books/:id` | Get book by ID  |
+| POST   | `/books`     | Create new book |
+| PATCH  | `/books/:id` | Update book     |
+| DELETE | `/books/:id` | Delete book     |
+
+**Create Book Example:**
+
+```json
+{
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "rating": 4.2
+}
+```
+
+### Users API
+
+| Method | Endpoint              | Description       |
+| ------ | --------------------- | ----------------- |
+| GET    | `/users`              | Get all users     |
+| GET    | `/users/:id`          | Get user by ID    |
+| GET    | `/users/email/:email` | Get user by email |
+| POST   | `/users`              | Create new user   |
+| PATCH  | `/users/:id`          | Update user       |
+| DELETE | `/users/:id`          | Delete user       |
+
+**Create User Example:**
+
+```json
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}
+```
+
+## 🛠️ Development
+
+### Available Scripts
+
+```bash
+# Build
+npm run build                           # Build all services
+npm run build:bookstore-api-gateway     # Build API Gateway
+npm run build:users                     # Build Users service
+npm run build:books                     # Build Books service
+
+# Development
+npm run start:dev                       # Start API Gateway in watch mode
+npm run start:dev:users                 # Start Users service in watch mode
+npm run start:dev:books                 # Start Books service in watch mode
+
+# Database
+npm run db:generate                     # Generate Prisma client
+npm run db:migrate                      # Run database migrations
+npm run db:push                         # Push schema changes to database
+npm run db:studio                       # Open Prisma Studio (database GUI)
+npm run db:seed                         # Seed database with initial data
+
+# Code Quality
+npm run lint                            # Run ESLint
+npm run format                          # Format code with Prettier
+npm run test                            # Run unit tests
+npm run test:e2e                        # Run end-to-end tests
+npm run test:cov                        # Run tests with coverage
+```
+
+### Project Structure
+
+```
+bookstore/
+├── apps/
+│   ├── bookstore-api-gateway/          # API Gateway service
+│   ├── books/                          # Books microservice
+│   └── users/                          # Users microservice
+├── libs/
+│   └── common/                         # Shared libraries and utilities
+├── prisma/
+│   ├── schema.prisma                   # Database schema
+│   └── seed.ts                         # Database seeding script
+├── generated/
+│   └── prisma/                         # Generated Prisma client
+├── docker-compose.yml                  # Production Docker setup
+├── docker-compose.dev.yml              # Development Docker setup
+└── package.json
+```
+
+### Database Management
+
+#### Creating Migrations
+
+```bash
+# After modifying prisma/schema.prisma
+npm run db:migrate
+```
+
+#### Checking Migration Status
+
+```bash
+npx prisma migrate status
+```
+
+#### Reset Database (Development)
+
+```bash
+npx prisma migrate reset
+```
+
+### Adding New Features
+
+1. **Update Prisma Schema** (`prisma/schema.prisma`)
+2. **Generate Migration** (`npm run db:migrate`)
+3. **Update DTOs** in `libs/common/src/dto/`
+4. **Update Services** to use new schema
+5. **Update Controllers** if needed
+6. **Test** your changes
+
+## 🐳 Docker Configuration
+
+### Development
+
+- Hot reloading enabled
+- Database exposed on port 5432
+- Redis exposed on port 6379
+- API Gateway on port 3000
+
+### Production
+
+- Optimized builds
+- No development dependencies
+- Internal networking only
+
+### Ports
+
+- **API Gateway**: 3000
+- **Users Service**: 3001 (dev only)
+- **Books Service**: 3002 (dev only)
+- **PostgreSQL**: 5432 (dev only)
+- **Redis**: 6379 (dev only)
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+```
+
+## 📊 Monitoring & Debugging
+
+### Prisma Studio
+
+```bash
+npm run db:studio
+```
+
+Access the database GUI at `http://localhost:5555`
+
+### Redis CLI
+
+```bash
+docker-compose exec redis redis-cli
+```
+
+### Database Logs
+
+```bash
+docker-compose logs db
+```
+
+## 🚀 Deployment
+
+### Environment Variables
+
+Required environment variables:
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `REDIS_HOST`: Redis host
+- `REDIS_PORT`: Redis port
+- `USERS_SERVICE_HOST`: Users service hostname
+- `BOOKS_SERVICE_HOST`: Books service hostname
+
+### Production Deployment
+
+1. **Set environment variables**
+2. **Run database migrations**
+
+```bash
+npm run db:migrate
+```
+
+3. **Build and start services**
+
+```bash
+docker-compose up -d
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+For support and questions:
+
+- Open an issue on GitHub
+- Check the [NestJS Documentation](https://docs.nestjs.com)
+- Visit [Prisma Documentation](https://www.prisma.io/docs)

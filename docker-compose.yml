@@ -8,6 +8,7 @@ services:
     ports:
       - '3000:3000'
     environment:
+      DATABASE_URL: 'postgresql://user:password@db:5432/bookstore_db'
       USERS_SERVICE_HOST: users-service
       BOOKS_SERVICE_HOST: books-service
       REDIS_HOST: 'redis'
@@ -25,7 +26,7 @@ services:
       context: .
       dockerfile: ./apps/users/Dockerfile
     environment:
-      DATABASE_URL: 'postgresql://user:password@db:5432/users_db'
+      DATABASE_URL: 'postgresql://user:password@db:5432/bookstore_db'
       REDIS_HOST: 'redis'
       REDIS_PORT: '6379'
       USERS_SERVICE_HOST: users-service
@@ -41,7 +42,7 @@ services:
       context: .
       dockerfile: ./apps/books/Dockerfile
     environment:
-      DATABASE_URL: 'postgresql://user:password@db:5432/products_db'
+      DATABASE_URL: 'postgresql://user:password@db:5432/bookstore_db'
       REDIS_HOST: 'redis'
       REDIS_PORT: '6379'
       BOOKS_SERVICE_HOST: books-service
@@ -59,7 +60,7 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: users_db
+      POSTGRES_DB: bookstore_db
     networks:
       - nestjs-network
     restart: always

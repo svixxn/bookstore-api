@@ -1,8 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BooksService } from './books.service';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
+import { CreateBookDto, UpdateBookDto } from '@app/common';
 
 @Controller()
 export class BooksController {
@@ -25,8 +24,8 @@ export class BooksController {
 
   // fix ts
   @MessagePattern('books.update')
-  update(@Payload() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(updateBookDto.id, updateBookDto);
+  update(@Payload() payload: { id: number; updateBookDto: UpdateBookDto }) {
+    return this.booksService.update(payload.id, payload.updateBookDto);
   }
 
   @MessagePattern('books.remove')

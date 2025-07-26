@@ -1,50 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
-import { BookDto } from './dto/book.dto';
+import {
+  CreateBookDto,
+  UpdateBookDto,
+  BookDto,
+  PrismaService,
+} from '@app/common';
 
 @Injectable()
 export class BooksService {
-  private books: BookDto[] = [
-    { id: 1, title: '1984', author: 'George Orwell', rating: 5 },
-    {
-      id: 2,
-      title: 'To Kill a Mockingbird',
-      author: 'Harper Lee',
-      rating: 4.5,
-    },
-  ];
+  constructor(private prisma: PrismaService) {}
 
-  create(createBookDto: CreateBookDto) {
-    const newBook: BookDto = {
-      id: this.books.length + 1,
-      ...createBookDto,
-    };
-    this.books.push(newBook);
-    return newBook;
-  }
-
-  findAll() {
-    return this.books;
-  }
-
-  findOne(id: number) {
-    return this.books.find((book) => book.id === id) || null;
-  }
-
-  update(id: number, updateBookDto: UpdateBookDto) {
-    this.books = this.books.map((book) => {
-      if (book.id === id) {
-        return { ...book, ...updateBookDto };
-      }
-      return book;
+  async create(createBookDto: CreateBookDto): Promise<BookDto> {
+    const book = await this.prisma.book.create({
+      data: createBookDto,
     });
-    return this.books.find((book) => book.id === id);
+    return book;
   }
 
-  remove(id: number) {
-    const filteredBooks = this.books.filter((book) => book.id !== id);
-    this.books = filteredBooks;
-    return filteredBooks;
+  async findAll(): Promise<BookDto[]> {
+    return this.prisma.book.findMany();
+  }
+
+  async findOne(id: number): Promise<BookDto | null> {
+    return this.prisma.book.findUnique({
+      where: { id },
+    });
+  }
+
+  async update(
+    id: number,
+    updateBookDto: UpdateBookDto,
+  ): Promise<BookDto | null> {
+    try {
+      return await this.prisma.book.update({
+        where: { id },
+        data: updateBookDto,
+      });
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async remove(id: number): Promise<BookDto | null> {
+    try {
+      return await this.prisma.book.delete({
+        where: { id },
+      });
+    } catch (error) {
+      return null;
+    }
   }
 }

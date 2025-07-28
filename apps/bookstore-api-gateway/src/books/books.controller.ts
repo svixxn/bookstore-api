@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
-import { CreateBookDto, UpdateBookDto } from '@app/common';
+import { CreateBookDto, UpdateBookDto, JwtAuthGuard } from '@app/common';
 
 @Controller('books')
+@UseGuards(JwtAuthGuard)
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 

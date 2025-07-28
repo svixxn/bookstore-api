@@ -7,3 +7,7 @@ export * from './update-book.dto';
 export * from './user.dto';
 export * from './create-user.dto';
 export * from './update-user.dto';
+
+// Auth DTOs
+export * from './login.dto';
+export * from './register.dto';

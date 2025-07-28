@@ -6,10 +6,6 @@ import { CreateUserDto, UpdateUserDto } from '@app/common';
 export class UsersService {
   constructor(@Inject('USERS_CLIENT') private usersClient: ClientProxy) {}
 
-  create(createUserDto: CreateUserDto) {
-    return this.usersClient.send('users.create', createUserDto);
-  }
-
   findAll() {
     return this.usersClient.send('users.findAll', {});
   }

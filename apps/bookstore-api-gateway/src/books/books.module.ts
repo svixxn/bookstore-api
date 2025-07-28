@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { BooksController } from './books.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { JwtStrategy } from '@app/common';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,6 +20,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [BooksController],
-  providers: [BooksService],
+  providers: [BooksService, JwtStrategy],
 })
 export class BooksModule {}

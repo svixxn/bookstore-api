@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { UsersModule } from './users.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
@@ -12,6 +13,20 @@ async function bootstrap() {
         port: 3001,
       },
     },
+  );
+
+  // Enable global validation for microservice
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      disableErrorMessages: false,
+      validationError: {
+        target: false,
+        value: false,
+      },
+    }),
   );
 
   await app.listen();

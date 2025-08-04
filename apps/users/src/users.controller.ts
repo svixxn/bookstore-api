@@ -7,11 +7,6 @@ import { CreateUserDto, UpdateUserDto } from '@app/common';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @MessagePattern('users.create')
-  create(@Payload() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
   @MessagePattern('users.findAll')
   findAll() {
     return this.usersService.findAll();

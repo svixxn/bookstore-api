@@ -9,7 +9,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
-import { CreateBookDto, UpdateBookDto, JwtAuthGuard } from '@app/common';
+import {
+  CreateBookDto,
+  UpdateBookDto,
+  JwtAuthGuard,
+  CurrentUser,
+} from '@app/common';
 
 @Controller('books')
 @UseGuards(JwtAuthGuard)
@@ -17,13 +22,19 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    return this.booksService.create(createBookDto);
+  create(@Body() createBookDto: CreateBookDto, @CurrentUser() user: any) {
+    const bookWithAuthor = { ...createBookDto, authorId: user.userId };
+    return this.booksService.create(bookWithAuthor);
   }
 
   @Get()
   findAll() {
     return this.booksService.findAll();
+  }
+
+  @Get('my-books')
+  findAllMyBooks(@CurrentUser() user: any) {
+    return this.booksService.findAllMyBooks(user.userId);
   }
 
   @Get(':id')

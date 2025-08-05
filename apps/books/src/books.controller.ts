@@ -17,6 +17,11 @@ export class BooksController {
     return this.booksService.findAll();
   }
 
+  @MessagePattern('books.findAllMyBooks')
+  findAllMyBooks(@Payload() userId: number) {
+    return this.booksService.findAllMyBooks(userId);
+  }
+
   @MessagePattern('books.findOne')
   findOne(@Payload() id: number) {
     return this.booksService.findOne(id);

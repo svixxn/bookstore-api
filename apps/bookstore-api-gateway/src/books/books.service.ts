@@ -14,6 +14,10 @@ export class BooksService {
     return this.usersClient.send('books.findAll', {});
   }
 
+  findAllMyBooks(userId: number) {
+    return this.usersClient.send('books.findAllMyBooks', userId);
+  }
+
   findOne(id: number) {
     return this.usersClient.send('books.findOne', id);
   }

@@ -19,17 +19,20 @@ model User {
   name     String
   email    String @unique
   password String
+  books    Book[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
 
   @@map("users")
 }
 
 model Book {
-  id     Int    @id @default(autoincrement())
-  title  String
-  author String
-  rating Float
+  id       Int    @id @default(autoincrement())
+  title    String
+  rating   Float
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

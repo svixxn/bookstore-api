@@ -4,29 +4,29 @@ import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class BooksService {
-  constructor(@Inject('BOOKS_CLIENT') private usersClient: ClientProxy) {}
+  constructor(@Inject('BOOKS_CLIENT') private booksClient: ClientProxy) {}
 
-  create(createBookDto: CreateBookDto) {
-    return this.usersClient.send('books.create', createBookDto);
+  create(createBookDto: CreateBookDto, authorId: number) {
+    return this.booksClient.send('books.create', { createBookDto, authorId });
   }
 
   findAll() {
-    return this.usersClient.send('books.findAll', {});
+    return this.booksClient.send('books.findAll', {});
   }
 
   findAllMyBooks(userId: number) {
-    return this.usersClient.send('books.findAllMyBooks', userId);
+    return this.booksClient.send('books.findAllMyBooks', userId);
   }
 
   findOne(id: number) {
-    return this.usersClient.send('books.findOne', id);
+    return this.booksClient.send('books.findOne', id);
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
-    return this.usersClient.send('books.update', { id, updateBookDto });
+    return this.booksClient.send('books.update', { id, updateBookDto });
   }
 
   remove(id: number) {
-    return this.usersClient.send('books.remove', id);
+    return this.booksClient.send('books.remove', id);
   }
 }

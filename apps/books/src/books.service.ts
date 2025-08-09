@@ -10,13 +10,19 @@ import {
 export class BooksService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createBookDto: CreateBookDto): Promise<BookDto> {
-    if (!createBookDto.authorId) {
+  async create(
+    createBookDto: CreateBookDto,
+    authorId: number,
+  ): Promise<BookDto> {
+    if (!authorId) {
       throw new Error('Author ID is required');
     }
 
     const book = await this.prisma.book.create({
-      data: createBookDto as Required<CreateBookDto>,
+      data: {
+        ...createBookDto,
+        authorId,
+      },
     });
     return book;
   }

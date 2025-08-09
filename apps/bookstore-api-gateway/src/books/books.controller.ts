@@ -23,8 +23,7 @@ export class BooksController {
 
   @Post()
   create(@Body() createBookDto: CreateBookDto, @CurrentUser() user: any) {
-    const bookWithAuthor = { ...createBookDto, authorId: user.userId };
-    return this.booksService.create(bookWithAuthor);
+    return this.booksService.create(createBookDto, user.userId);
   }
 
   @Get()
@@ -32,7 +31,7 @@ export class BooksController {
     return this.booksService.findAll();
   }
 
-  @Get('my-books')
+  @Get('my')
   findAllMyBooks(@CurrentUser() user: any) {
     return this.booksService.findAllMyBooks(user.userId);
   }

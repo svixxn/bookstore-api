@@ -8,8 +8,10 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @MessagePattern('books.create')
-  create(@Payload() createBookDto: CreateBookDto) {
-    return this.booksService.create(createBookDto);
+  create(
+    @Payload() payload: { createBookDto: CreateBookDto; authorId: number },
+  ) {
+    return this.booksService.create(payload.createBookDto, payload.authorId);
   }
 
   @MessagePattern('books.findAll')

@@ -6,7 +6,6 @@ import {
   MaxLength,
   Min,
   Max,
-  IsOptional,
 } from 'class-validator';
 
 export class CreateBookDto {
@@ -15,10 +14,6 @@ export class CreateBookDto {
   @MinLength(1, { message: 'Title must not be empty' })
   @MaxLength(200, { message: 'Title must not exceed 200 characters' })
   title: string;
-
-  @IsOptional()
-  @IsNumber({}, { message: 'Author ID must be a number' })
-  authorId?: number;
 
   @IsNumber({}, { message: 'Rating must be a number' })
   @Min(0, { message: 'Rating must be at least 0' })
